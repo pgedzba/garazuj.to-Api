@@ -2,6 +2,9 @@ package to.garazuj.security.services;
 
 import to.garazuj.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,12 +14,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Data
 public class UserPrinciple implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
 
-    private String name;
+    private String firstName;
+    
+    private String lastName;
 
     private String username;
 
@@ -27,11 +33,12 @@ public class UserPrinciple implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrinciple(Long id, String name, 
+    public UserPrinciple(Long id, String firstName, String lastName,
 			    		String username, String email, String password, 
 			    		Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -45,7 +52,8 @@ public class UserPrinciple implements UserDetails {
 
         return new UserPrinciple(
                 user.getId(),
-                user.getName(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
@@ -53,29 +61,7 @@ public class UserPrinciple implements UserDetails {
         );
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
+        @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }

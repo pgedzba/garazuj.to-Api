@@ -1,0 +1,9 @@
+# Distribution / packaging
+.classpath
+.project
+target/
+.settings/
+
+# Environments
+.idea/
+
