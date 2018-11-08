@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,14 +36,15 @@ public class LoggedUserRestApis {
     }
 	
 	@PutMapping()
-	public @ResponseBody ResponseEntity editUser(@RequestParam Long id, @RequestBody EditUserForm form) {
-		User u = null;
-		u = userRepository.findById(id).get();
+	public @ResponseBody ResponseEntity editUser(Principal principal, @RequestBody EditUserForm form) {
+		UserPrinciple loggedUser = (UserPrinciple)SecurityContextHolder.getContext()
+				.getAuthentication()
+                .getPrincipal();
 		if(!form.getFirstName().isEmpty())
-			u.setFirstName(form.getFirstName());
+			loggedUser.setFirstName(form.getFirstName());
 		if(!form.getLastName().isEmpty())
-			u.setLastName(form.getLastName());
-		userRepository.save(u);
+			loggedUser.setLastName(form.getLastName());
+
 		
 		return new ResponseEntity(HttpStatus.OK);
 	}
