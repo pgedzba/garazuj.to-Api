@@ -36,17 +36,18 @@ public class LoggedUserRestApis {
     }
 	
 	@PutMapping()
-	public @ResponseBody ResponseEntity editUser(Principal principal, @RequestBody EditUserForm form) {
+	public User editUser(Principal principal, @RequestBody EditUserForm form) {
 		UserPrinciple loggedUser = (UserPrinciple)SecurityContextHolder.getContext()
 				.getAuthentication()
                 .getPrincipal();
+		User u = userRepository.findByUsername(loggedUser.getUsername()).get();
 		if(!form.getFirstName().isEmpty())
-			loggedUser.setFirstName(form.getFirstName());
+			u.setFirstName(form.getFirstName());
 		if(!form.getLastName().isEmpty())
-			loggedUser.setLastName(form.getLastName());
-
+			u.setLastName(form.getLastName());
+		userRepository.save(u);
 		
-		return new ResponseEntity(HttpStatus.OK);
+		return u;
 	}
 
 }
