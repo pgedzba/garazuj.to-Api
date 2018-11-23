@@ -21,7 +21,7 @@ Clone [front-end](https://github.com/Damian-Czarnota/garazuj-to)
 
 ## Setup database
 1. Create a new database:
-`` mysql> create database garazuj_to;
-mysql> create user 'admin'@'localhost' identified by 'garazuj';
-mysql> grant all on garazuj_to.* to 'admin'@'localhost'; ``
+``create database garazuj_to;
+create user 'admin'@'localhost' identified by 'garazuj';
+grant all on garazuj_to.* to 'admin'@'localhost'; ``
 3. Serve database on `` port 3310 ``
