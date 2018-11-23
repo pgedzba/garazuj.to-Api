@@ -71,10 +71,10 @@ public class User{
     private List<Car> cars = new ArrayList<>();
 
     @OneToMany(fetch = LAZY)
-    @JoinTable(name = "profile_to_comments",
+    @JoinTable(name = "user_comments",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    private List<ProfileComment> profileComments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     public User(String firstName, String lastName, String username, String email, String password) {
         this.firstName = firstName;

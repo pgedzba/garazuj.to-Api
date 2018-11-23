@@ -36,8 +36,8 @@ public class Car {
     private Long mileage;
 
     @OneToMany(fetch = LAZY)
-    @JoinTable(name = "car_to_comments",
+    @JoinTable(name = "car_comments",
             joinColumns = @JoinColumn(name = "car_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    private List<CarComment> carComments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 }

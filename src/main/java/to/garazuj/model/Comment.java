@@ -5,15 +5,17 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name="post_comments")
+@Table(name="comments")
 @Data
 @NoArgsConstructor
-public class PostComment {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +25,4 @@ public class PostComment {
 
     @OneToOne
     private User author;
-
-    @OneToOne(fetch = LAZY)
-    private Post post;
 }

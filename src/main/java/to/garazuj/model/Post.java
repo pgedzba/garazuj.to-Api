@@ -34,8 +34,8 @@ public class Post {
     private User author;
 
     @OneToMany(fetch = LAZY)
-    @JoinTable(name = "post_to_comments",
+    @JoinTable(name = "post_comments",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    private List<PostComment> postComments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 }
