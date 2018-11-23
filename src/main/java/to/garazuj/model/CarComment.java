@@ -5,27 +5,20 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name="posts")
+@Table(name="car_comments")
 @Data
 @NoArgsConstructor
-public class Post {
-
+public class CarComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank
-    @Size(min=5, max = 100)
-    private String title;
 
     @NotBlank
     private String content;
@@ -33,9 +26,12 @@ public class Post {
     @OneToOne
     private User author;
 
+    @OneToOne(fetch = LAZY)
+    private Car car;
+
     @OneToMany(fetch = LAZY)
-    @JoinTable(name = "post_to_comments",
-            joinColumns = @JoinColumn(name = "post_id"),
+    @JoinTable(name = "car_to_comments",
+            joinColumns = @JoinColumn(name = "car_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    private List<PostComment> postComments = new ArrayList<>();
+    private List<CarComment> carComments = new ArrayList<>();
 }

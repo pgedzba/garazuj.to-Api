@@ -5,6 +5,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name="cars")
@@ -30,4 +34,10 @@ public class Car {
 
     @NotBlank
     private Long mileage;
+
+    @OneToMany(fetch = LAZY)
+    @JoinTable(name = "car_to_comments",
+            joinColumns = @JoinColumn(name = "car_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id"))
+    private List<CarComment> carComments = new ArrayList<>();
 }
