@@ -28,7 +28,7 @@ public class LoggedUserRestApis {
 	UserRepository userRepository;
 	
 	@GetMapping()
-    public UserPrinciple getCurrentUser(Principal principal) {
+    public UserPrinciple getCurrentUser() {
 
         return ((UserPrinciple) SecurityContextHolder.getContext()
                 .getAuthentication()
@@ -36,7 +36,7 @@ public class LoggedUserRestApis {
     }
 	
 	@PutMapping()
-	public User editUser(Principal principal, @RequestBody EditUserForm form) {
+	public User editUser(@RequestBody EditUserForm form) {
 		UserPrinciple loggedUser = (UserPrinciple)SecurityContextHolder.getContext()
 				.getAuthentication()
                 .getPrincipal();

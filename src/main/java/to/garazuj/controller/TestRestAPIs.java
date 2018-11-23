@@ -27,12 +27,4 @@ public class TestRestAPIs {
 	public String adminAccess() {
 		return ">>> Admin Contents";
 	}
-
-	@GetMapping("/api/test/currentuser")
-    public UserPrinciple getCurrentUser(Principal principal) {
-
-        return ((UserPrinciple) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal());
-    }
 }
