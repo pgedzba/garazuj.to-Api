@@ -28,14 +28,16 @@ public class UserPrinciple implements UserDetails {
 
     private String email;
 
+    private String profileImage;
+
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserPrinciple(Long id, String firstName, String lastName,
-			    		String username, String email, String password, 
-			    		Collection<? extends GrantedAuthority> authorities) {
+			    		String username, String email, String password,
+			    		Collection<? extends GrantedAuthority> authorities, String profileImage) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,6 +45,7 @@ public class UserPrinciple implements UserDetails {
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.profileImage = profileImage;
     }
 
     public static UserPrinciple build(User user) {
@@ -57,7 +60,8 @@ public class UserPrinciple implements UserDetails {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities
+                authorities,
+                user.getProfileImage()
         );
     }
 
