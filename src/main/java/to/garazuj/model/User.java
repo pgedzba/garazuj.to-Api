@@ -33,8 +33,7 @@ public class User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@Lob @Basic(fetch=LAZY)
-    private byte[] profileImage;
+	private String profileImage;
 
     @NotBlank
     @Size(min=3, max = 50)
