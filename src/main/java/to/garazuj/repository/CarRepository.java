@@ -5,9 +5,12 @@ import org.springframework.stereotype.Repository;
 import to.garazuj.model.Car;
 import to.garazuj.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
     Optional<Car> findById(String username);
+    Optional<List<Car>> findByOwnerId(Long ownerId);
+    void deleteCarById(Long id);
 }
