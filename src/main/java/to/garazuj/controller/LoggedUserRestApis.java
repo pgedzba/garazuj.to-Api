@@ -1,7 +1,5 @@
 package to.garazuj.controller;
 
-import java.io.IOException;
-import java.security.Principal;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,50 +15,50 @@ import to.garazuj.model.User;
 import to.garazuj.repository.UserRepository;
 import to.garazuj.security.services.UserPrinciple;
 
+import java.io.IOException;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(value="/api/me")
 public class LoggedUserRestApis {
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	@GetMapping()
-    public UserPrinciple getCurrentUser() {
+    public User getCurrentUser() {
 
         return ((UserPrinciple) SecurityContextHolder.getContext()
                 .getAuthentication()
-                .getPrincipal());
+                .getPrincipal()).getUser();
     }
-
+	
 	@PutMapping()
 	public ResponseEntity editUser(@RequestBody EditUserForm form) {
-		UserPrinciple loggedUser = (UserPrinciple)SecurityContextHolder.getContext()
-				.getAuthentication()
-                .getPrincipal();
-		User u = userRepository.findByUsername(loggedUser.getUsername()).get();
+		User user = ((UserPrinciple) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal()).getUser();
 		if(!form.getFirstName().isEmpty())
-			u.setFirstName(form.getFirstName());
+			user.setFirstName(form.getFirstName());
 		if(!form.getLastName().isEmpty())
-			u.setLastName(form.getLastName());
-		userRepository.save(u);
+			user.setLastName(form.getLastName());
+		userRepository.save(user);
 
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
 	@PostMapping()
 	public ResponseEntity addAvatar(@RequestParam("file") MultipartFile file) {
-		UserPrinciple loggedUser = (UserPrinciple)SecurityContextHolder.getContext()
-				.getAuthentication()
-				.getPrincipal();
-		User u = userRepository.findByUsername(loggedUser.getUsername()).get();
+        User user = ((UserPrinciple) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal()).getUser();
 
 		try {
 			if(file.getName().contains("..")) {
 				throw new FileStorageException("Sorry! Filename contains invalid path sequence " + file.getName());
 			}
-			u.setProfileImage(Base64.encode(file.getBytes()));
-			userRepository.save(u);
+			user.setProfileImage(Base64.encode(file.getBytes()));
+			userRepository.save(user);
 		} catch (IOException ex) {
 			throw new FileStorageException("Could not store file " + file.getName() + ". Please try again!", ex);
 		}
@@ -69,12 +67,12 @@ public class LoggedUserRestApis {
 
 	@DeleteMapping()
 	public ResponseEntity deleteAvatar() {
-		UserPrinciple loggedUser = (UserPrinciple)SecurityContextHolder.getContext()
-				.getAuthentication()
-				.getPrincipal();
-		User u = userRepository.findByUsername(loggedUser.getUsername()).get();
-		u.setProfileImage(null);
-		userRepository.save(u);
+        User user = ((UserPrinciple) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal()).getUser();
+		user.setProfileImage(null);
+		userRepository.save(user);
 		return new ResponseEntity(HttpStatus.OK);
 	}
+
 }

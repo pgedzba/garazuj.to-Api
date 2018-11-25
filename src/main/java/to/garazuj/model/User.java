@@ -10,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
 import lombok.Data;
@@ -55,6 +56,7 @@ public class User{
 
     @NotBlank
     @Size(min=6, max = 100)
+    @JsonIgnore
     private String password;
 
     @ManyToMany(fetch = LAZY)
@@ -67,12 +69,14 @@ public class User{
     @JoinTable(name = "user_cars",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "car_id"))
+    @JsonIgnore
     private List<Car> cars = new ArrayList<>();
 
     @OneToMany(fetch = LAZY)
     @JoinTable(name = "user_comments",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
+    @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
     public User(String firstName, String lastName, String username, String email, String password) {

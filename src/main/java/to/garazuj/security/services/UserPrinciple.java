@@ -1,13 +1,11 @@
 package to.garazuj.security.services;
 
 import to.garazuj.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,37 +13,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
-public class UserPrinciple implements UserDetails {
-	private static final long serialVersionUID = 1L;
+public class UserPrinciple extends org.springframework.security.core.userdetails.User {
 
-	private Long id;
+	private User user;
 
-    private String firstName;
-    
-    private String lastName;
-
-    private String username;
-
-    private String email;
-
-    private String profileImage;
-
-    @JsonIgnore
-    private String password;
-
-    private Collection<? extends GrantedAuthority> authorities;
-
-    public UserPrinciple(Long id, String firstName, String lastName,
-			    		String username, String email, String password,
-			    		Collection<? extends GrantedAuthority> authorities, String profileImage) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.authorities = authorities;
-        this.profileImage = profileImage;
+    public UserPrinciple(User user, Collection<? extends GrantedAuthority> authorities) {
+        super(user.getUsername(), user.getPassword(), authorities);
+        this.user = user;
     }
 
     public static UserPrinciple build(User user) {
@@ -54,40 +28,9 @@ public class UserPrinciple implements UserDetails {
         ).collect(Collectors.toList());
 
         return new UserPrinciple(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPassword(),
-                authorities,
-                user.getProfileImage()
+                user,
+                authorities
         );
-    }
-
-        @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
     @Override
@@ -95,7 +38,7 @@ public class UserPrinciple implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         
-        UserPrinciple user = (UserPrinciple) o;
-        return Objects.equals(id, user.id);
+        UserPrinciple userPrinciple = (UserPrinciple) o;
+        return Objects.equals(this.user.getId(), userPrinciple.getUser().getId());
     }
 }
