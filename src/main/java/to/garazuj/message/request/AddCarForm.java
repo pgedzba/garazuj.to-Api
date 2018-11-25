@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 public class AddCarForm {
 
     @NotBlank
-    private String mark;
+    private String brand;
 
     @NotBlank
     private String model;

@@ -26,7 +26,7 @@ public class Car {
     private User owner;
 
     @NotBlank
-    private String mark;
+    private String brand;
 
     @NotBlank
     private String model;
