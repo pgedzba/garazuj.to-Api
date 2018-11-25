@@ -2,6 +2,8 @@ package to.garazuj.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import to.garazuj.enums.CarType;
+import to.garazuj.enums.FuelType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -24,16 +26,23 @@ public class Car {
     private User owner;
 
     @NotBlank
-    private String name; // Manufacturer, model, etc
+    private String mark;
 
     @NotBlank
+    private String model;
+
+    private CarType type;
+
     private int productionYear;
 
     @NotBlank
-    private int engineSize;
+    private String engineSize;
 
-    @NotBlank
     private Long mileage;
+
+    private int horsePower;
+
+    private FuelType fuelType;
 
     @OneToMany
     @JoinTable(name = "car_comments",
