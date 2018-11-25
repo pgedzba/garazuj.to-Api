@@ -56,21 +56,15 @@ public class CarRestAPIs {
 
 	@GetMapping()
 	public List<Car> getCars(){
-		List<Car> cars;
-		User user = ((UserPrinciple) SecurityContextHolder.getContext()
+		return ((UserPrinciple) SecurityContextHolder.getContext()
 				.getAuthentication()
-				.getPrincipal()).getUser();
-		if(carRepository.findByOwnerId(user.getId()).isPresent())
-			cars =carRepository.findByOwnerId(user.getId()).get();
-		else
-			cars = Collections.emptyList();
-
-		return cars;
+				.getPrincipal()).getUser().getCars();
 	}
 
 	@Transactional
 	@DeleteMapping()
 	public ResponseEntity<?> deleteCar(@RequestParam Long index){
+		//TODO: Validate if we can delete car ( if we are owner )
 		carRepository.deleteCarById(index);
 
 		return new ResponseEntity<>(new ResponseMessage("Car deleted successfully!"), HttpStatus.OK);
