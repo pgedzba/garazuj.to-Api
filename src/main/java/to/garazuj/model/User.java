@@ -16,6 +16,7 @@ import org.hibernate.annotations.NaturalId;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -59,20 +60,19 @@ public class User{
     @JsonIgnore
     private String password;
 
-    @ManyToMany(fetch = LAZY)
+    @ManyToMany
     @JoinTable(name = "user_roles", 
     	joinColumns = @JoinColumn(name = "user_id"), 
     	inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(fetch = LAZY)
+    @OneToMany(fetch=EAGER)
     @JoinTable(name = "user_cars",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "car_id"))
-    @JsonIgnore
     private List<Car> cars = new ArrayList<>();
 
-    @OneToMany(fetch = LAZY)
+    @OneToMany
     @JoinTable(name = "user_comments",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))

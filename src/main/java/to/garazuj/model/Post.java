@@ -33,7 +33,7 @@ public class Post {
     @OneToOne
     private User author;
 
-    @OneToMany(fetch = LAZY)
+    @OneToMany
     @JoinTable(name = "post_comments",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
