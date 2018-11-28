@@ -39,7 +39,7 @@ public class CarRestAPIs {
 				.getAuthentication()
 				.getPrincipal()).getUser();
 
-		car.setOwner(user);
+		car.setUser(user);
 		car.setBrand(addCarForm.getBrand());
 		car.setModel(addCarForm.getModel());
 		car.setType(addCarForm.getType());
