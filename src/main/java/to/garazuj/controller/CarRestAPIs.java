@@ -70,4 +70,27 @@ public class CarRestAPIs {
 		return new ResponseEntity<>(new ResponseMessage("Car deleted successfully!"), HttpStatus.OK);
 	}
 
+	@PutMapping()
+	public ResponseEntity<?> editCar(@RequestBody AddCarForm addCarForm){
+		Car car;
+		if(carRepository.findById(addCarForm.getId()).isPresent()) {
+			car = carRepository.findById(addCarForm.getId()).get();
+			car.setBrand(addCarForm.getBrand());
+			car.setModel(addCarForm.getModel());
+			car.setType(addCarForm.getType());
+			car.setProductionYear(addCarForm.getProductionYear());
+			car.setEngineSize(addCarForm.getEngineSize());
+			car.setMileage(addCarForm.getMileage());
+			car.setHorsePower(addCarForm.getHorsePower());
+			car.setFuelType(addCarForm.getFuelType());
+			carRepository.save(car);
+			
+			return new ResponseEntity<>(new ResponseMessage("Car edited successfully!"), HttpStatus.OK);
+		}
+		else
+			return new ResponseEntity<>(new ResponseMessage("Car doesn't exist!"), HttpStatus.BAD_REQUEST);
+				
+		
+	}
+	
 }
