@@ -7,10 +7,13 @@ import to.garazuj.enums.FuelType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name="cars")
@@ -18,12 +21,16 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 public class Car {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private User owner;
+	@JsonIgnore
+    @ManyToOne(fetch = EAGER)
+    @JoinTable(name = "user_cars",
+    joinColumns = @JoinColumn(name = "car_id"),
+    inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private User user;
 
     @NotBlank
     private String brand;
@@ -44,7 +51,7 @@ public class Car {
 
     private FuelType fuelType;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "car_comments",
             joinColumns = @JoinColumn(name = "car_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
