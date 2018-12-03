@@ -7,6 +7,8 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class AddCarForm {
 
+	private Long id;
+	
     @NotBlank
     private String brand;
 
