@@ -77,7 +77,7 @@ public class CarService {
 				.orElseThrow(() -> new CarException("Car not found " + addCarForm.getId()));
 		try {
 			if(!car.getUser().getId().equals(user.getId()))
-				throw new CarException("You don't have permission to delete this car");
+				throw new CarException("You don't have permission to edit this car");
 			
 			car.setBrand(addCarForm.getBrand());
 			car.setModel(addCarForm.getModel());
@@ -90,7 +90,7 @@ public class CarService {
 			carRepository.save(car);
 		}
 		catch(CarException ex) {
-			throw new CarException("Could not delete car with id: " + car.getId(), ex);
+			throw new CarException("Could not save car with id: " + car.getId(), ex);
 		}
 	}
 }
