@@ -26,7 +26,7 @@ public class LoggedUserRestApis {
 	@GetMapping()
     public User getCurrentUser() {
 
-        return  userService.getUser();
+        return  userService.getCurrentUser();
     }
 	
 	@PutMapping()

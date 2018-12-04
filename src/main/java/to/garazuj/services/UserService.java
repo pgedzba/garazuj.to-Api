@@ -21,16 +21,15 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public User getUser() {
+	public User getCurrentUser() {
 		return ((UserPrinciple) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal()).getUser();
 	}
 	
 	public User editUser(EditUserForm form) {
-		User user = ((UserPrinciple) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal()).getUser();
+		User user = getCurrentUser();
+		
 		if(!form.getFirstName().isEmpty())
 			user.setFirstName(form.getFirstName());
 		if(!form.getLastName().isEmpty())
@@ -40,9 +39,7 @@ public class UserService {
 	}
 	
 	public User addAvatar(MultipartFile file) {
-		User user = ((UserPrinciple) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal()).getUser();
+		User user = getCurrentUser();
 
 		try {
 			if(file.getName().contains("..")) {
@@ -56,9 +53,7 @@ public class UserService {
 	}
 	
 	public User deleteAvatar() {
-		User user = ((UserPrinciple) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal()).getUser();
+		User user = getCurrentUser();
 		user.setProfileImage(null);
 		return userRepository.save(user);
 	}
