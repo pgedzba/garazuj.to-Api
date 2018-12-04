@@ -10,18 +10,14 @@ import to.garazuj.repository.RoleRepository;
 @Component
 public class DatabaseLoader implements CommandLineRunner {
 
-    private final RoleRepository repository;
-
     @Autowired
-    public DatabaseLoader(RoleRepository repository) {
-        this.repository = repository;
-    }
+    private RoleRepository roleRepository;
 
     @Override
     public void run(String... strings) throws Exception {
-        if(!this.repository.findByName(RoleName.ROLE_ADMIN).isPresent())
-            this.repository.save(new Role(RoleName.ROLE_ADMIN));
-        if(!this.repository.findByName(RoleName.ROLE_USER).isPresent())
-            this.repository.save(new Role(RoleName.ROLE_USER));
+        for(RoleName role : RoleName.values() ) {
+            if (!this.roleRepository.findByName(role).isPresent())
+                this.roleRepository.save(new Role(role));
+        }
     }
 }
