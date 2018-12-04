@@ -5,7 +5,7 @@ import to.garazuj.enums.CarType;
 import to.garazuj.enums.FuelType;
 import javax.validation.constraints.NotBlank;
 @Data
-public class AddCarForm {
+public class AddOrEditCarForm {
 
 	private Long id;
 	
