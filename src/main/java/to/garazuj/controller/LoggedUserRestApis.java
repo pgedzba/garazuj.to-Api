@@ -13,6 +13,7 @@ import to.garazuj.exception.FileStorageException;
 import to.garazuj.message.request.EditUserForm;
 import to.garazuj.model.User;
 import to.garazuj.repository.UserRepository;
+import to.garazuj.security.SecurityUtils;
 import to.garazuj.security.services.UserPrinciple;
 
 import java.io.IOException;
@@ -27,17 +28,12 @@ public class LoggedUserRestApis {
 
 	@GetMapping()
     public User getCurrentUser() {
-
-        return ((UserPrinciple) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal()).getUser();
+        return SecurityUtils.getCurrentUser();
     }
 	
 	@PutMapping()
 	public ResponseEntity editUser(@RequestBody EditUserForm form) {
-		User user = ((UserPrinciple) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal()).getUser();
+		User user = SecurityUtils.getCurrentUser();
 		if(!form.getFirstName().isEmpty())
 			user.setFirstName(form.getFirstName());
 		if(!form.getLastName().isEmpty())
@@ -49,9 +45,7 @@ public class LoggedUserRestApis {
 
 	@PostMapping()
 	public ResponseEntity addAvatar(@RequestParam("file") MultipartFile file) {
-        User user = ((UserPrinciple) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal()).getUser();
+        User user = SecurityUtils.getCurrentUser();
 
 		try {
 			if(file.getName().contains("..")) {
@@ -67,9 +61,7 @@ public class LoggedUserRestApis {
 
 	@DeleteMapping()
 	public ResponseEntity deleteAvatar() {
-        User user = ((UserPrinciple) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal()).getUser();
+        User user = SecurityUtils.getCurrentUser();
 		user.setProfileImage(null);
 		userRepository.save(user);
 		return new ResponseEntity(HttpStatus.OK);

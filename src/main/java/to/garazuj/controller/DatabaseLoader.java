@@ -14,7 +14,7 @@ public class DatabaseLoader implements CommandLineRunner {
     private RoleRepository roleRepository;
 
     @Override
-    public void run(String... strings) throws Exception {
+    public void run(String... strings) {
         for(RoleName role : RoleName.values() ) {
             if (!this.roleRepository.findByName(role).isPresent())
                 this.roleRepository.save(new Role(role));
