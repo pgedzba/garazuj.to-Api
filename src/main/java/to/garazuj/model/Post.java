@@ -27,15 +27,14 @@ public class Post {
     @Size(min=5, max = 100)
     private String title;
 
-    @NotBlank
+    @NotBlank @Lob
     private String content;
+    
+    @NotBlank
+    @Size(min=50, max = 500)
+    private String shortDescription;
 
     @OneToOne
     private User author;
 
-    @OneToMany
-    @JoinTable(name = "post_comments",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id"))
-    private List<Comment> comments = new ArrayList<>();
 }
