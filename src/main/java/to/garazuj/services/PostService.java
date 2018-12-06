@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import to.garazuj.exception.PostException;
 import to.garazuj.message.request.AddPostForm;
 import to.garazuj.model.Post;
 import to.garazuj.repository.PostRepository;
@@ -37,7 +38,21 @@ public class PostService {
 		return post;
 	}
 	
-	public void deletePost(Long id) {
+	public void deletePostAdmin(Long id) {
 		postRepository.deleteById(id);
+	}
+	
+	public void deletePostUser(Long id) {
+		Post post = postRepository.findById(id)
+				.orElseThrow(() -> new PostException("Post not found " + id));
+		
+		try {
+			if(!post.getAuthor().getId().equals(SecurityUtils.getCurrentUser().getId()))
+				throw new PostException("You don't have permission to delete this post");
+			postRepository.delete(post);
+			}
+			catch(PostException ex) {
+				throw new PostException("Could not delete post with id: " + id, ex);
+			}
 	}
 }
