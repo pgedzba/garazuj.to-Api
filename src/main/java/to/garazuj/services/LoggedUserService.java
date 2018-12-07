@@ -32,7 +32,7 @@ public class LoggedUserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(){
+    public void deleteAvatar(){
         User user = SecurityUtils.getCurrentUser();
         user.setProfileImage(null);
         userRepository.save(user);

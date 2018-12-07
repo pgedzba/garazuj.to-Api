@@ -38,7 +38,7 @@ public class LoggedUserRestApis {
 
 	@DeleteMapping()
 	public ResponseEntity deleteAvatar() {
-		loggedUserService.deleteUser();
+		loggedUserService.deleteAvatar();
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
