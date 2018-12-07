@@ -37,4 +37,18 @@ public class Post {
     @OneToOne
     private User author;
 
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "post_comments",
+    joinColumns = @JoinColumn(name = "post_id"),
+    inverseJoinColumns = @JoinColumn(name = "comment_id"))
+    private List<Comment> comments;
+    
+    
+    public void setComments(Comment comment) {
+    	this.comments.add(comment);
+    }
+    
+    public void deleteComment(Comment comment) {
+    	this.comments.remove(comment);
+    }
 }

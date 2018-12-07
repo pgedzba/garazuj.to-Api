@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import to.garazuj.message.request.AddCommentForm;
 import to.garazuj.message.request.AddPostForm;
+import to.garazuj.model.Comment;
 import to.garazuj.model.Post;
 import to.garazuj.services.PostService;
 
@@ -38,7 +42,7 @@ public class PostRestAPIs {
 	}
 	
 	@GetMapping(value="/{id}")
-	public Optional<Post> getPost(@PathVariable(value="id") Long id){
+	public Optional<Post> getPost(@PathVariable Long id){
 		return postService.getPost(id);
 	}
 	
@@ -55,6 +59,29 @@ public class PostRestAPIs {
 			postService.deletePostAdmin(id);
 		else
 			postService.deletePostUser(id);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping(value="{id}/comments")
+	public ResponseEntity<Post> addComment(@PathVariable Long id, @RequestBody AddCommentForm addCommentForm){
+		postService.addComment(id, addCommentForm);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/{id}/comments")
+	public ResponseEntity<List<Comment>> getComments(@PathVariable Long id){
+		return new ResponseEntity<>(postService.getComments(id),HttpStatus.OK);
+	}
+	
+	@Transactional
+	@DeleteMapping(value="/{postId}/comments")
+	public ResponseEntity<?> deleteComment(HttpServletRequest request, @PathVariable Long postId, @RequestParam Long id){
+		if(request.isUserInRole("ROLE_ADMIN"))
+			postService.deleteCommentAdmin(id);
+		else
+			postService.deleteCommentUser(postId, id);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
