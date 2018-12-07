@@ -38,7 +38,7 @@ public class CommentsRestAPIs {
 	}
 
 	@Transactional
-	@DeleteMapping(value="/delete/{commentId}")
+	@DeleteMapping(value="/{commentId}")
 	public ResponseEntity<?> deleteComment(HttpServletRequest request, @PathVariable Long commentId){
 		if(request.isUserInRole("ROLE_ADMIN"))
 			commentService.deleteCommentAdmin(commentId);
