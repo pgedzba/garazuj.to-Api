@@ -6,12 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name="posts")
@@ -37,4 +32,9 @@ public class Post {
     @OneToOne
     private User author;
 
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "post_comments",
+    joinColumns = @JoinColumn(name = "post_id"),
+    inverseJoinColumns = @JoinColumn(name = "comment_id"))
+    private List<Comment> comments;
 }

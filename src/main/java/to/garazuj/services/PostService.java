@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import to.garazuj.exception.PostException;
+import to.garazuj.message.request.AddCommentForm;
 import to.garazuj.message.request.AddPostForm;
+import to.garazuj.model.Comment;
 import to.garazuj.model.Post;
+import to.garazuj.repository.CommentRepository;
 import to.garazuj.repository.PostRepository;
 import to.garazuj.security.SecurityUtils;
 
@@ -17,6 +21,9 @@ public class PostService {
 
 	@Autowired
 	PostRepository postRepository;
+	
+	@Autowired
+	CommentRepository commentRepository;
 	
 	public List<Post> getPosts(){
 		return postRepository.findAll();
@@ -55,4 +62,6 @@ public class PostService {
 				throw new PostException("Could not delete post with id: " + id, ex);
 			}
 	}
+	
+
 }
