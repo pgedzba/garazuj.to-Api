@@ -9,13 +9,13 @@ import to.garazuj.model.User;
 public class AddPostForm {
 	
 	@NotBlank
-	public String title;
+	private String title;
 	
-	public User author;
-	
-	@NotBlank
-	public String content;
+	private User author;
 	
 	@NotBlank
-	public String shortDescription;
+	private String content;
+	
+	@NotBlank
+	private String shortDescription;
 }
