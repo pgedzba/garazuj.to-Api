@@ -54,35 +54,12 @@ public class PostRestAPIs {
 	}
 	
 	@DeleteMapping()
-	public ResponseEntity<Post> deletePost(HttpServletRequest request, @RequestParam Long id){
-		if(request.isUserInRole("ROLE_ADMIN"))
+	public ResponseEntity<Post> deletePost(HttpServletRequest request, @RequestParam Long id) {
+		if (request.isUserInRole("ROLE_ADMIN"))
 			postService.deletePostAdmin(id);
 		else
 			postService.deletePostUser(id);
-		
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	@PutMapping(value="{id}/comments")
-	public ResponseEntity<Post> addComment(@PathVariable Long id, @RequestBody AddCommentForm addCommentForm){
-		postService.addComment(id, addCommentForm);
-		
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	@GetMapping(value="/{id}/comments")
-	public ResponseEntity<List<Comment>> getComments(@PathVariable Long id){
-		return new ResponseEntity<>(postService.getComments(id),HttpStatus.OK);
-	}
-	
-	@Transactional
-	@DeleteMapping(value="/{postId}/comments")
-	public ResponseEntity<?> deleteComment(HttpServletRequest request, @PathVariable Long postId, @RequestParam Long id){
-		if(request.isUserInRole("ROLE_ADMIN"))
-			postService.deleteCommentAdmin(id);
-		else
-			postService.deleteCommentUser(postId, id);
-		
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

@@ -63,41 +63,5 @@ public class PostService {
 			}
 	}
 	
-	public void addComment(Long postId, AddCommentForm addCommentForm) {
-		Post post = postRepository.findById(postId)
-				.orElseThrow(() -> new PostException("Post not found " + postId));
-		Comment comment = new Comment();
-		
-		comment.setAuthor(SecurityUtils.getCurrentUser());
-		comment.setContent(addCommentForm.getContent());
-		comment.setCreateDataTime();
-		
-		post.setComments(comment);
-		postRepository.save(post);
-	}
-	
-	public List<Comment> getComments(Long postId){
-		Post post = postRepository.findById(postId)
-				.orElseThrow(() -> new PostException("Post not found " + postId));
-		return post.getComments();
-	}
-	
-	public void deleteCommentAdmin(Long id) {
-		commentRepository.deleteById(id);
-	}
-	
-	public void deleteCommentUser(Long postId, Long commentId) {
-		Post post = postRepository.findById(postId)
-				.orElseThrow(() -> new PostException("Post not found " + postId));
-		Comment comment = commentRepository.findById(commentId)
-				.orElseThrow(() -> new PostException("Comment not found " + commentId));
-		try {
-		if(!comment.getAuthor().getId().equals(SecurityUtils.getCurrentUser().getId()))
-			throw new PostException("You don't have permissions to delete comment with id:"+postId);
-			post.deleteComment(comment);
-		}
-		catch(NullPointerException ex) {
-			throw new PostException("Could not delete comment with id:"+postId);
-		}
-	}
+
 }
