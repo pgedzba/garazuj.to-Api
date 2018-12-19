@@ -3,13 +3,20 @@ package to.garazuj.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import to.garazuj.exception.CarException;
+import to.garazuj.exception.CommentException;
+import to.garazuj.exception.PostException;
 import to.garazuj.message.request.AddOrEditCarForm;
 import to.garazuj.model.Car;
+import to.garazuj.model.Comment;
 import to.garazuj.model.User;
 import to.garazuj.repository.CarRepository;
 import to.garazuj.security.SecurityUtils;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class CarService {
@@ -39,10 +46,23 @@ public class CarService {
         return SecurityUtils.getCurrentUser().getCars();
     }
 
-    public void deleteCar(Long id) {
+    public void deleteCarAdmin(Long id) {
         carRepository.deleteCarById(id);
     }
 
+    public void deleteCarUser(Long id) {
+    	 Car car = carRepository.findById(id)
+                 .orElseThrow(() -> new CarException("Car not found " + id));
+         try {
+             if(!car.getUser().getId().equals(SecurityUtils.getCurrentUser().getId()))
+                 throw new CarException("You don't have permissions to delete car with id:"+id);
+             carRepository.deleteCarById(id);
+         }
+         catch(NullPointerException ex) {
+             throw new CarException("Could not delete car with id:"+id);
+         }
+    }
+    
     public Car editCar(@RequestBody AddOrEditCarForm addOrEditCarForm) {
         if (carRepository.findById(addOrEditCarForm.getId()).isPresent()) {
             Car car = carRepository.findById(addOrEditCarForm.getId()).get(); //TODO: Make it access database only once

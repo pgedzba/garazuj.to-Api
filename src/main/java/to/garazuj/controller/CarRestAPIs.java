@@ -9,6 +9,7 @@ import to.garazuj.message.response.ResponseMessage;
 import to.garazuj.model.Car;
 import to.garazuj.services.CarService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
@@ -34,10 +35,12 @@ public class CarRestAPIs {
 
 	@Transactional
 	@DeleteMapping()
-	public ResponseEntity<?> deleteCar(@RequestParam Long index){
-		//TODO: Validate if we can delete car ( if we are owner )
-		//TODO: Make it return something more useful
-		carService.deleteCar(index);
+	public ResponseEntity<?> deleteCar(HttpServletRequest request, @RequestParam Long id){
+		if(request.isUserInRole("ROLE_ADMIN"))
+			carService.deleteCarAdmin(id);
+		else
+			carService.deleteCarUser(id);
+		
 		return new ResponseEntity<>(new ResponseMessage(""), HttpStatus.OK);
 	}
 
