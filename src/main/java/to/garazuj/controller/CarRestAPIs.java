@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -33,6 +34,14 @@ public class CarRestAPIs {
 		return new ResponseEntity<>(carService.getCarsForCurrentUser(), HttpStatus.OK);
 	}
 
+	@GetMapping(value="/{carId}")
+	public ResponseEntity<Car> getCar(@PathVariable Long carId){
+		Optional<Car> car = carService.getCar(carId);
+		if(car.isPresent())
+			return new ResponseEntity<>(car.get(), HttpStatus.OK);
+		else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 	@Transactional
 	@DeleteMapping()
 	public ResponseEntity<?> deleteCar(HttpServletRequest request, @RequestParam Long id){

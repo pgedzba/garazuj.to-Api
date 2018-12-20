@@ -33,7 +33,7 @@ public class CommentsRestAPIs {
 	}
 
 	@GetMapping(value="/post/{postId}")
-	public ResponseEntity<List<Comment>> getComments(@PathVariable Long postId){
+	public ResponseEntity<List<Comment>> getCommentsPost(@PathVariable Long postId){
 		return new ResponseEntity<>(commentService.getCommentsPost(postId),HttpStatus.OK);
 	}
 
@@ -46,6 +46,18 @@ public class CommentsRestAPIs {
 			commentService.deleteCommentUser(commentId);
 
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping(value="/car/{carId}")
+	public ResponseEntity<Comment> addCommentCar(@PathVariable Long carId, @RequestBody AddCommentForm addCommentForm){
+		commentService.addCommentCar(carId, addCommentForm);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/car/{carId}")
+	public ResponseEntity<List<Comment>> getCommentsCar(@PathVariable Long carId){
+		return new ResponseEntity<>(commentService.getCommentsCar(carId),HttpStatus.OK);
 	}
 
 }
