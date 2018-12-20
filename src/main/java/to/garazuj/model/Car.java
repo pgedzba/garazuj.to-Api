@@ -8,6 +8,8 @@ import to.garazuj.enums.FuelType;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.annotations.Cascade;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ public class Car {
     private Long id;
 
 	@JsonIgnore
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "user_cars",
     joinColumns = @JoinColumn(name = "car_id"),
     inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -50,10 +52,18 @@ public class Car {
     private int horsePower;
 
     private FuelType fuelType;
-
-    @OneToMany(fetch = FetchType.EAGER)
+    
+    @JsonIgnore
+    @OneToMany(cascade=CascadeType.ALL)
     @JoinTable(name = "car_comments",
-            joinColumns = @JoinColumn(name = "car_id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id"))
+    joinColumns = @JoinColumn(name = "car_id"),
+    inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private List<Comment> comments = new ArrayList<>();
+    
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinTable(name = "car_history",
+            joinColumns = @JoinColumn(name = "car_id"),
+            inverseJoinColumns = @JoinColumn(name = "history_id"))
+    private List<History> history = new ArrayList<>();
 }
