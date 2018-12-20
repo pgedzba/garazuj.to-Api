@@ -29,9 +29,9 @@ public class HistoryService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public ResponseEntity<?> addAction(AddActionForm addActionForm){
-		Car car = carRepository.findById(addActionForm.getCarID())
-                .orElseThrow(() -> new CarException("Car not found " + addActionForm.getCarID()));
+	public ResponseEntity<?> addAction(Long carID, AddActionForm addActionForm){
+		Car car = carRepository.findById(carID)
+                .orElseThrow(() -> new CarException("Car not found " + carID));
 		User user =  userRepository.findById(addActionForm.getUserID())
                 .orElseThrow(() -> new UserException("User not found " + addActionForm.getUserID()));
 		History history = new History();

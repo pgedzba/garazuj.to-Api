@@ -12,9 +12,7 @@ public class AddActionForm {
 	
 	@NotNull
 	private Float price;
-	
-	private Long carID;
-	
+		
 	private Long userID;
 	
 	@NotBlank
