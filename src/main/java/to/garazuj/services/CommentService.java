@@ -26,6 +26,9 @@ public class CommentService {
 
     @Autowired
     private PostRepository postRepository;
+    
+    @Autowired
+    private CarRepository carRepository;
 
     public void addCommentPost(Long postId, AddCommentForm addCommentForm) {
         Post post = postRepository.findById(postId)
@@ -61,5 +64,24 @@ public class CommentService {
         catch(NullPointerException ex) {
             throw new CommentException("Could not delete comment with id:"+id);
         }
+    }
+    
+    public void addCommentCar(Long carId, AddCommentForm addCommentForm) {
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new PostException("Post not found " + carId));
+        Comment comment = new Comment();
+
+        comment.setAuthor(SecurityUtils.getCurrentUser());
+        comment.setContent(addCommentForm.getContent());
+        comment.setCreateDataTime();
+
+        car.getComments().add(comment);
+        carRepository.save(car);
+    }
+
+    public List<Comment> getCommentsCar(Long carId){
+    	Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new PostException("Post not found " + carId));
+        return car.getComments();
     }
 }

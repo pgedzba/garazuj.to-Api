@@ -15,6 +15,7 @@ import to.garazuj.repository.CarRepository;
 import to.garazuj.security.SecurityUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -63,7 +64,7 @@ public class CarService {
          }
     }
     
-    public Car editCar(@RequestBody AddOrEditCarForm addOrEditCarForm) {
+    public Car editCar(AddOrEditCarForm addOrEditCarForm) {
         if (carRepository.findById(addOrEditCarForm.getId()).isPresent()) {
             Car car = carRepository.findById(addOrEditCarForm.getId()).get(); //TODO: Make it access database only once
             car.setBrand(addOrEditCarForm.getBrand());
@@ -79,5 +80,9 @@ public class CarService {
             return car;
         } else
             return null;
+    }
+    
+    public Optional<Car> getCar(Long id) {
+    	return carRepository.findById(id);
     }
 }
