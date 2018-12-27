@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import to.garazuj.exception.CarException;
+import to.garazuj.exception.HistoryException;
 import to.garazuj.exception.UserException;
 import to.garazuj.message.request.AddActionForm;
 import to.garazuj.model.Car;
@@ -16,6 +17,7 @@ import to.garazuj.model.User;
 import to.garazuj.repository.CarRepository;
 import to.garazuj.repository.HistoryRepository;
 import to.garazuj.repository.UserRepository;
+import to.garazuj.security.SecurityUtils;
 
 @Service
 public class HistoryService {
@@ -32,12 +34,10 @@ public class HistoryService {
 	public ResponseEntity<?> addAction(Long carID, AddActionForm addActionForm){
 		Car car = carRepository.findById(carID)
                 .orElseThrow(() -> new CarException("Car not found " + carID));
-		User user =  userRepository.findById(addActionForm.getUserID())
-                .orElseThrow(() -> new UserException("User not found " + addActionForm.getUserID()));
 		History history = new History();
 		history.setCar(car);
-		history.setUser(user);
-		history.setDate(addActionForm.getDate());
+		history.setUser(SecurityUtils.getCurrentUser());
+		history.setDate(addActionForm.getStartDate());
 		history.setDescription(addActionForm.getDescription());
 		history.setPrice(addActionForm.getPrice());
 		
@@ -46,7 +46,7 @@ public class HistoryService {
 		return new ResponseEntity<>(history,HttpStatus.OK);
 	}
 	
-	public List<History> getCarHisotry(Long carID){
+	public List<History> getCarHistory(Long carID){
 		Car car = carRepository.findById(carID)
                 .orElseThrow(() -> new CarException("Car not found " + carID));
 		
@@ -58,5 +58,22 @@ public class HistoryService {
                 .orElseThrow(() -> new UserException("User not found " + userID));
 		
 		return user.getHistory();
+	}
+
+	public void deleteActionAdmin(Long id) {
+		historyRepository.deleteById(id);
+	}
+
+	public void deleteActionUser(Long id) {
+		History history = historyRepository.findById(id)
+				.orElseThrow(() -> new HistoryException("History item not found " + id));
+		try {
+			if(!history.getUser().getId().equals(SecurityUtils.getCurrentUser().getId()))
+				throw new HistoryException("You don't have permissions to delete history item with id:"+id);
+			historyRepository.deleteById(id);
+		}
+		catch(NullPointerException ex) {
+			throw new HistoryException("Could not delete history item with id:"+id);
+		}
 	}
 }

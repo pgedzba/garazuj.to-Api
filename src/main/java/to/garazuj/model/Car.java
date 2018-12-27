@@ -2,6 +2,8 @@ package to.garazuj.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import to.garazuj.enums.CarType;
 import to.garazuj.enums.FuelType;
 
@@ -52,16 +54,16 @@ public class Car {
     private int horsePower;
 
     private FuelType fuelType;
-    
+
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL)
     @JoinTable(name = "car_comments",
     joinColumns = @JoinColumn(name = "car_id"),
     inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private List<Comment> comments = new ArrayList<>();
-    
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany
     @JoinTable(name = "car_history",
             joinColumns = @JoinColumn(name = "car_id"),
             inverseJoinColumns = @JoinColumn(name = "history_id"))

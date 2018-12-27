@@ -10,10 +10,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name="history")
@@ -25,8 +29,8 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@JsonIgnore
-    @ManyToOne
+    @JsonIgnore
+	@ManyToOne
     @JoinTable(name = "car_history",
     joinColumns = @JoinColumn(name = "history_id"),
     inverseJoinColumns = @JoinColumn(name = "car_id"))
