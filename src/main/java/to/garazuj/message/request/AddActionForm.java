@@ -1,5 +1,6 @@
 package to.garazuj.message.request;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
@@ -19,5 +20,5 @@ public class AddActionForm {
 	private String description;
 	
 	@NotBlank
-	private Date date;
+	private Date startDate;
 }
