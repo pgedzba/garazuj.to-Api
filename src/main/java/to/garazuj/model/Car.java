@@ -68,4 +68,8 @@ public class Car {
             joinColumns = @JoinColumn(name = "car_id"),
             inverseJoinColumns = @JoinColumn(name = "history_id"))
     private List<History> history = new ArrayList<>();
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "car")
+    private List<DBFile> photos;
 }

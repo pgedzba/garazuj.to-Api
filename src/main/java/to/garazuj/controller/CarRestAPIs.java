@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import to.garazuj.message.request.AddOrEditCarForm;
 import to.garazuj.message.response.ResponseMessage;
 import to.garazuj.model.Car;
@@ -60,5 +61,10 @@ public class CarRestAPIs {
 			return new ResponseEntity<>(car, HttpStatus.OK);
 		else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
+
+	@PatchMapping(value="/{carId}")
+	public ResponseEntity<Car> uploadPhotos(@PathVariable Long carId, @RequestParam("photos") MultipartFile[] files){
+		carService.uploadPhotos(carId, files);
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
 }
