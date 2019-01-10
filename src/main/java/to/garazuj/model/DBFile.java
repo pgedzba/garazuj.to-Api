@@ -1,11 +1,8 @@
 package to.garazuj.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
@@ -27,6 +24,10 @@ public class DBFile {
 
 	    @Lob
 	    private byte[] data;
+
+	    @ManyToOne
+		@JsonIgnore
+		Car car;
 
 	    public DBFile(String fileName, String fileType, byte[] data) {
 	        this.fileName = fileName;

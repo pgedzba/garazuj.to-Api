@@ -1,7 +1,9 @@
 package to.garazuj.services;
 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import to.garazuj.exception.FileStorageException;
 import to.garazuj.exception.MyFileNotFoundException;
+import to.garazuj.model.Car;
 import to.garazuj.model.DBFile;
 import to.garazuj.repository.DBFileRepository;
 
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class DBFileStorageService {
@@ -17,7 +20,7 @@ public class DBFileStorageService {
     @Autowired
     private DBFileRepository dbFileRepository;
 
-    public DBFile storeFile(MultipartFile file) {
+    public DBFile storeFile(MultipartFile file, Car car) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -28,11 +31,17 @@ public class DBFileStorageService {
             }
 
             DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes());
+                if(!car.equals(null))
+                    dbFile.setCar(car);
 
             return dbFileRepository.save(dbFile);
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
+    }
+
+    public DBFile storeFile(MultipartFile file) {
+        return storeFile(file,null);
     }
 
     public DBFile getFile(String fileId) {

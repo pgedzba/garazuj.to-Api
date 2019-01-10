@@ -2,28 +2,29 @@ package to.garazuj.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import org.springframework.web.multipart.MultipartFile;
 import to.garazuj.exception.CarException;
-import to.garazuj.exception.CommentException;
-import to.garazuj.exception.PostException;
 import to.garazuj.message.request.AddOrEditCarForm;
 import to.garazuj.model.Car;
-import to.garazuj.model.Comment;
 import to.garazuj.model.User;
 import to.garazuj.repository.CarRepository;
 import to.garazuj.security.SecurityUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class CarService {
 
     @Autowired
     private CarRepository carRepository;
+
+    @Autowired
+    private DBFileStorageService dbFileStorageService;
 
     public Car addCar(AddOrEditCarForm addOrEditCarForm) {
         Car car = new Car();
@@ -84,5 +85,14 @@ public class CarService {
     
     public Optional<Car> getCar(Long id) {
     	return carRepository.findById(id);
+    }
+
+    public void uploadPhotos(Long id, MultipartFile[] files){
+        Car car = getCar(id)
+                .orElseThrow(() -> new CarException("Car not found " + id));
+        Arrays.asList(files)
+                .stream()
+                .map(file -> dbFileStorageService.storeFile(file,car))
+                .collect(Collectors.toList());
     }
 }
