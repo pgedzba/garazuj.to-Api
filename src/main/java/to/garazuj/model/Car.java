@@ -1,5 +1,7 @@
 package to.garazuj.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
@@ -29,11 +31,11 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "user_cars",
     joinColumns = @JoinColumn(name = "car_id"),
     inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonBackReference
     private User user;
 
     @NotBlank
@@ -67,9 +69,11 @@ public class Car {
     @JoinTable(name = "car_history",
             joinColumns = @JoinColumn(name = "car_id"),
             inverseJoinColumns = @JoinColumn(name = "history_id"))
+    @JsonManagedReference
     private List<History> history = new ArrayList<>();
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "car")
+    @JsonManagedReference
     private List<DBFile> photos;
 }

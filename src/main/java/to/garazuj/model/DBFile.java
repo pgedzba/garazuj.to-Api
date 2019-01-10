@@ -2,6 +2,7 @@ package to.garazuj.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -26,7 +27,7 @@ public class DBFile {
 	    private byte[] data;
 
 	    @ManyToOne
-		@JsonIgnore
+		@JsonBackReference
 		Car car;
 
 	    public DBFile(String fileName, String fileType, byte[] data) {

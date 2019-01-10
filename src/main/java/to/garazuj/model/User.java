@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.NaturalId;
@@ -74,6 +75,7 @@ public class User{
     @JoinTable(name = "user_cars",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "car_id"))
+    @JsonManagedReference
     private List<Car> cars = new ArrayList<>();
 
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -88,6 +90,7 @@ public class User{
     @JoinTable(name = "user_history",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "history_id"))
+    @JsonManagedReference
     private List<History> history = new ArrayList<>();
     
     public User(String firstName, String lastName, String username, String email, String password) {

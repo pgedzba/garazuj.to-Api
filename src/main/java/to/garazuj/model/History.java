@@ -29,18 +29,18 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
 	@ManyToOne
     @JoinTable(name = "car_history",
     joinColumns = @JoinColumn(name = "history_id"),
     inverseJoinColumns = @JoinColumn(name = "car_id"))
+    @JsonBackReference
     private Car car;
     
     @ManyToOne
-    @JsonIgnore
     @JoinTable(name = "user_history",
     joinColumns = @JoinColumn(name = "history_id"),
     inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonBackReference
     private User user;
     
     @NotNull
