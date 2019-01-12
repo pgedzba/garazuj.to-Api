@@ -3,14 +3,15 @@ package to.garazuj.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import to.garazuj.model.User;
 import to.garazuj.services.UsersService;
+
+import javax.transaction.Transactional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -28,5 +29,13 @@ public class UsersRestAPIs {
 	@GetMapping(value="/user/{id}")
 	public User getUser(@PathVariable Long id){
 		return usersService.getUser(id);
+	}
+
+	@Transactional
+	@DeleteMapping(value="user/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<?> deleteUser(@PathVariable Long id){
+		usersService.deleteUser(id);
+		return new ResponseEntity<>("", HttpStatus.OK);
 	}
 }
