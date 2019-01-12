@@ -13,6 +13,7 @@ import to.garazuj.services.MechanicsService;
 import java.util.List;
 
 @Controller
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/mechanics")
 public class MechanicsRestAPIs {
