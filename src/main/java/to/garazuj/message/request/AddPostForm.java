@@ -11,8 +11,6 @@ public class AddPostForm {
 	@NotBlank
 	private String title;
 	
-	private User author;
-	
 	@NotBlank
 	private String content;
 	

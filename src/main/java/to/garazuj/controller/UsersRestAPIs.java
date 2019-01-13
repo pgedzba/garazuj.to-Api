@@ -1,13 +1,11 @@
 package to.garazuj.controller;
 
+import java.nio.file.OpenOption;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import to.garazuj.model.User;
 import to.garazuj.services.UsersService;
@@ -21,8 +19,11 @@ public class UsersRestAPIs {
 	UsersService usersService;
 	
 	@GetMapping(value="/users")
-	public List<User> getAllUsers(){
-		return usersService.getAllUsers();
+	public List<User> getAllUsers(@RequestParam Optional<String> search){
+		if(search.isPresent())
+			return usersService.searchUsers(search.get());
+		else
+			return usersService.getAllUsers();
 	}
 	
 	@GetMapping(value="/user/{id}")
