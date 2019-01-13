@@ -68,6 +68,10 @@ public class PostService {
 				throw new PostException("Could not delete post with id: " + id, ex);
 			}
 	}
+
+	public List<Post> searchPosts(String search){
+		return postRepository.findWithSearch(search);
+	}
 	
 
 }

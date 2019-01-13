@@ -37,8 +37,11 @@ public class PostRestAPIs {
 	PostService postService;
 	
 	@GetMapping()
-	public List<Post> getPosts(){
-		return postService.getPosts();
+	public List<Post> getPosts(@RequestParam Optional<String> search){
+		if(search.isPresent())
+			return postService.searchPosts(search.get());
+		else
+			return postService.getPosts();
 	}
 	
 	@GetMapping(value="/{id}")

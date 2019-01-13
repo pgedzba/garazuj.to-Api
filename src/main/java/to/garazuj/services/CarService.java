@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import to.garazuj.enums.FuelType;
 import to.garazuj.exception.CarException;
 import to.garazuj.message.request.AddOrEditCarForm;
 import to.garazuj.model.Car;
@@ -49,6 +50,14 @@ public class CarService {
     @Transactional(readOnly = true)
     public List<Car> getCarsForCurrentUser() {
         return SecurityUtils.getCurrentUser().getCars();
+    }
+
+    public List<Car> searchCars(String search) {
+        return carRepository.findWithSearch(SecurityUtils.getCurrentUser().getId(), search);
+    }
+
+    public List<Car> filterCars(FuelType fuelType) {
+        return carRepository.findByUserIdAndFuelTypeIn(SecurityUtils.getCurrentUser().getId(), fuelType);
     }
 
     @Transactional

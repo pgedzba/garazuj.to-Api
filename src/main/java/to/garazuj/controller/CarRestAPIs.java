@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import to.garazuj.enums.FuelType;
 import to.garazuj.message.request.AddOrEditCarForm;
 import to.garazuj.message.response.ResponseMessage;
 import to.garazuj.model.Car;
@@ -31,8 +32,14 @@ public class CarRestAPIs {
 	}
 
 	@GetMapping()
-	public ResponseEntity<List<Car>> getCars(){
-		return new ResponseEntity<>(carService.getCarsForCurrentUser(), HttpStatus.OK);
+	public ResponseEntity<List<Car>> getCars(@RequestParam Optional<String> search, @RequestParam Optional<FuelType> fuelType){
+		if(search.isPresent())
+			return new ResponseEntity<>(carService.searchCars(search.get()), HttpStatus.OK);
+		else if(fuelType.isPresent())
+			return new ResponseEntity<>(carService.filterCars(fuelType.get()), HttpStatus.OK);
+		else
+			return new ResponseEntity<>(carService.getCarsForCurrentUser(), HttpStatus.OK);
+
 	}
 
 	@GetMapping(value="/{carId}")

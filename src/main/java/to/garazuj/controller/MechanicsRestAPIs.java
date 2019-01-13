@@ -11,6 +11,7 @@ import to.garazuj.model.Mechanic;
 import to.garazuj.services.MechanicsService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -22,8 +23,11 @@ public class MechanicsRestAPIs {
     MechanicsService mechanicsService;
 
     @GetMapping
-    public ResponseEntity<List<Mechanic>> getMechanics() {
-        return new ResponseEntity<>(mechanicsService.getMechanics(), HttpStatus.OK);
+    public ResponseEntity<List<Mechanic>> getMechanics(@RequestParam Optional<String> search) {
+        if(search.isPresent())
+            return new ResponseEntity<>(mechanicsService.searchMechanics(search.get()), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(mechanicsService.getMechanics(), HttpStatus.OK);
     }
 
     @PostMapping
