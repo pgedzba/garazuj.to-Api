@@ -25,4 +25,7 @@ public class UsersService {
                 .orElseThrow(() -> new UserException("User not found " + id));
 	}
 
+	public List<User> searchUsers(String search){
+		return userRepository.findWithSearch(search);
+	}
 }
