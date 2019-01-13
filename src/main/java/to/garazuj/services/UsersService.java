@@ -25,6 +25,10 @@ public class UsersService {
                 .orElseThrow(() -> new UserException("User not found " + id));
 	}
 
+	public void deleteUser(Long id){
+		userRepository.deleteById(id);
+	}
+
 	public List<User> searchUsers(String search){
 		return userRepository.findWithSearch(search);
 	}
