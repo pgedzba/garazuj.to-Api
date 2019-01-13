@@ -1,6 +1,8 @@
 package to.garazuj.controller;
 
+import java.nio.file.OpenOption;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,8 +24,11 @@ public class UsersRestAPIs {
 	UsersService usersService;
 	
 	@GetMapping(value="/users")
-	public List<User> getAllUsers(){
-		return usersService.getAllUsers();
+	public List<User> getAllUsers(@RequestParam Optional<String> search){
+		if(search.isPresent())
+			return usersService.searchUsers(search.get());
+		else
+			return usersService.getAllUsers();
 	}
 	
 	@GetMapping(value="/user/{id}")

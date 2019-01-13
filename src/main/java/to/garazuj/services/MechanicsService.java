@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import to.garazuj.exception.CarException;
 import to.garazuj.message.request.AddMechanicForm;
 import to.garazuj.model.Mechanic;
+import to.garazuj.model.Post;
 import to.garazuj.repository.MechanicsRepository;
 import to.garazuj.security.SecurityUtils;
 
@@ -33,5 +34,9 @@ public class MechanicsService {
 
 	public void deleteMechanic(Long id){
 		mechanicsRepository.deleteById(id);
+	}
+
+	public List<Mechanic> searchMechanics(String search){
+		return mechanicsRepository.findWithSearch(search);
 	}
 }
