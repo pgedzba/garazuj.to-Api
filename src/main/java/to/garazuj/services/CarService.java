@@ -3,6 +3,7 @@ package to.garazuj.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import to.garazuj.exception.CarException;
 import to.garazuj.message.request.AddOrEditCarForm;
@@ -26,6 +27,7 @@ public class CarService {
     @Autowired
     private DBFileStorageService dbFileStorageService;
 
+    @Transactional
     public Car addCar(AddOrEditCarForm addOrEditCarForm) {
         Car car = new Car();
         User user = SecurityUtils.getCurrentUser();
@@ -44,14 +46,17 @@ public class CarService {
         return car;
     }
 
+    @Transactional(readOnly = true)
     public List<Car> getCarsForCurrentUser() {
         return SecurityUtils.getCurrentUser().getCars();
     }
 
+    @Transactional
     public void deleteCarAdmin(Long id) {
         carRepository.deleteCarById(id);
     }
 
+    @Transactional
     public void deleteCarUser(Long id) {
     	 Car car = carRepository.findById(id)
                  .orElseThrow(() -> new CarException("Car not found " + id));
@@ -64,7 +69,8 @@ public class CarService {
              throw new CarException("Could not delete car with id:"+id);
          }
     }
-    
+
+    @Transactional
     public Car editCar(AddOrEditCarForm addOrEditCarForm) {
         if (carRepository.findById(addOrEditCarForm.getId()).isPresent()) {
             Car car = carRepository.findById(addOrEditCarForm.getId()).get(); //TODO: Make it access database only once
@@ -82,11 +88,13 @@ public class CarService {
         } else
             return null;
     }
-    
+
+    @Transactional(readOnly = true)
     public Optional<Car> getCar(Long id) {
     	return carRepository.findById(id);
     }
 
+    @Transactional
     public void uploadPhotos(Long id, MultipartFile[] files){
         Car car = getCar(id)
                 .orElseThrow(() -> new CarException("Car not found " + id));

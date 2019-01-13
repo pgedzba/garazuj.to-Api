@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import to.garazuj.exception.PostException;
 import to.garazuj.message.request.AddCommentForm;
 import to.garazuj.message.request.AddPostForm;
@@ -24,15 +25,18 @@ public class PostService {
 	
 	@Autowired
 	CommentRepository commentRepository;
-	
+
+	@Transactional(readOnly = true)
 	public List<Post> getPosts(){
 		return postRepository.findAll();
 	}
-	
+
+	@Transactional(readOnly = true)
 	public Optional<Post> getPost(Long id){
 		return postRepository.findById(id);
 	}
-	
+
+	@Transactional
 	public Post addPost(AddPostForm addPostForm) {
 		Post post = new Post();
 		post.setAuthor(SecurityUtils.getCurrentUser());
@@ -44,11 +48,13 @@ public class PostService {
 		
 		return post;
 	}
-	
+
+	@Transactional
 	public void deletePostAdmin(Long id) {
 		postRepository.deleteById(id);
 	}
-	
+
+	@Transactional
 	public void deletePostUser(Long id) {
 		Post post = postRepository.findById(id)
 				.orElseThrow(() -> new PostException("Post not found " + id));

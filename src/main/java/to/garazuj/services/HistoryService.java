@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import to.garazuj.exception.CarException;
 import to.garazuj.exception.HistoryException;
 import to.garazuj.exception.UserException;
@@ -30,7 +31,8 @@ public class HistoryService {
 	
 	@Autowired
 	UserRepository userRepository;
-	
+
+	@Transactional
 	public ResponseEntity<?> addAction(Long carID, AddActionForm addActionForm){
 		Car car = carRepository.findById(carID)
                 .orElseThrow(() -> new CarException("Car not found " + carID));
@@ -45,14 +47,16 @@ public class HistoryService {
 		
 		return new ResponseEntity<>(history,HttpStatus.OK);
 	}
-	
+
+	@Transactional(readOnly = true)
 	public List<History> getCarHistory(Long carID){
 		Car car = carRepository.findById(carID)
                 .orElseThrow(() -> new CarException("Car not found " + carID));
 		
 		return car.getHistory();
 	}
-	
+
+	@Transactional(readOnly = true)
 	public List<History> getUserHistory(Long userID){
 		User user =  userRepository.findById(userID)
                 .orElseThrow(() -> new UserException("User not found " + userID));
@@ -60,10 +64,12 @@ public class HistoryService {
 		return user.getHistory();
 	}
 
+	@Transactional
 	public void deleteActionAdmin(Long id) {
 		historyRepository.deleteById(id);
 	}
 
+	@Transactional
 	public void deleteActionUser(Long id) {
 		History history = historyRepository.findById(id)
 				.orElseThrow(() -> new HistoryException("History item not found " + id));

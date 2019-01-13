@@ -2,6 +2,7 @@ package to.garazuj.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import to.garazuj.exception.CommentException;
 import to.garazuj.exception.PostException;
@@ -30,6 +31,7 @@ public class CommentService {
     @Autowired
     private CarRepository carRepository;
 
+    @Transactional
     public void addCommentPost(Long postId, AddCommentForm addCommentForm) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException("Post not found " + postId));
@@ -43,16 +45,19 @@ public class CommentService {
         postRepository.save(post);
     }
 
+    @Transactional(readOnly = true)
     public List<Comment> getCommentsPost(Long postId){
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException("Post not found " + postId));
         return post.getComments();
     }
 
+    @Transactional
     public void deleteCommentAdmin(Long id) {
         commentRepository.deleteById(id);
     }
 
+    @Transactional
     public void deleteCommentUser(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new PostException("Comment not found " + id));
@@ -65,7 +70,8 @@ public class CommentService {
             throw new CommentException("Could not delete comment with id:"+id);
         }
     }
-    
+
+    @Transactional
     public void addCommentCar(Long carId, AddCommentForm addCommentForm) {
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new PostException("Post not found " + carId));
@@ -79,6 +85,7 @@ public class CommentService {
         carRepository.save(car);
     }
 
+    @Transactional(readOnly = true)
     public List<Comment> getCommentsCar(Long carId){
     	Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new PostException("Post not found " + carId));

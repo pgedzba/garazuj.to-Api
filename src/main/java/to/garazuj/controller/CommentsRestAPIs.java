@@ -37,7 +37,6 @@ public class CommentsRestAPIs {
 		return new ResponseEntity<>(commentService.getCommentsPost(postId),HttpStatus.OK);
 	}
 
-	@Transactional
 	@DeleteMapping(value="/{commentId}")
 	public ResponseEntity<?> deleteComment(HttpServletRequest request, @PathVariable Long commentId){
 		if(request.isUserInRole("ROLE_ADMIN"))

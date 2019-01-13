@@ -1,5 +1,6 @@
 package to.garazuj.services;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import to.garazuj.exception.FileStorageException;
 import to.garazuj.exception.MyFileNotFoundException;
@@ -20,6 +21,7 @@ public class DBFileStorageService {
     @Autowired
     private DBFileRepository dbFileRepository;
 
+    @Transactional
     public DBFile storeFile(MultipartFile file, Car car) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -40,10 +42,12 @@ public class DBFileStorageService {
         }
     }
 
+    @Transactional
     public DBFile storeFile(MultipartFile file) {
         return storeFile(file,null);
     }
 
+    @Transactional(readOnly = true)
     public DBFile getFile(String fileId) {
         return dbFileRepository.findById(fileId)
                 .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));

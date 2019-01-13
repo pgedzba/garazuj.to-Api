@@ -2,6 +2,7 @@ package to.garazuj.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import to.garazuj.converter.ImgResizer;
 import to.garazuj.exception.FileResizeException;
@@ -23,6 +24,7 @@ public class LoggedUserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void editUser(EditUserForm form){
         User user = SecurityUtils.getCurrentUser();
         if(!form.getFirstName().isEmpty())
@@ -32,12 +34,14 @@ public class LoggedUserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void deleteAvatar(){
         User user = SecurityUtils.getCurrentUser();
         user.setProfileImage(null);
         userRepository.save(user);
     }
 
+    @Transactional
     public void addAvatar(MultipartFile file){
         User user = SecurityUtils.getCurrentUser();
         String ext = FilenameUtils.getExtension(file.getOriginalFilename());

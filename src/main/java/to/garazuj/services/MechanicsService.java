@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import to.garazuj.exception.CarException;
 import to.garazuj.message.request.AddMechanicForm;
 import to.garazuj.model.Mechanic;
@@ -17,7 +18,8 @@ public class MechanicsService {
 
 	@Autowired
 	MechanicsRepository mechanicsRepository;
-	
+
+	@Transactional
 	public ResponseEntity<?> addMechanic(AddMechanicForm addMechanicForm){
 		Mechanic mechanic = new Mechanic();
 		mechanic.setShortDescription(addMechanicForm.getShortDescription());
@@ -27,10 +29,12 @@ public class MechanicsService {
 		return new ResponseEntity<>(mechanic,HttpStatus.OK);
 	}
 
+	@Transactional(readOnly = true)
 	public List<Mechanic> getMechanics(){
 		return mechanicsRepository.findAll();
 	}
 
+	@Transactional
 	public void deleteMechanic(Long id){
 		mechanicsRepository.deleteById(id);
 	}

@@ -42,8 +42,7 @@ public class CarRestAPIs {
 			return new ResponseEntity<>(car.get(), HttpStatus.OK);
 		else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
-	@Transactional
+
 	@DeleteMapping()
 	public ResponseEntity<?> deleteCar(HttpServletRequest request, @RequestParam Long id){
 		if(request.isUserInRole("ROLE_ADMIN"))
